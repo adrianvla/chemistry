@@ -1,0 +1,142 @@
+---- Minecraft Crash Report ----
+// Sorry :(
+
+Time: 2023-12-23 22:06:19
+Description: Exception in server tick loop
+
+java.lang.ExceptionInInitializerError
+	at org.keke.chemistry.entity.BeakerLiquidBlockEntity.<init>(BeakerLiquid.java:18)
+	at org.keke.chemistry.block.BeakerBase.createBlockEntity(BeakerBase.java:33)
+	at net.minecraft.world.chunk.WorldChunk.createBlockEntity(WorldChunk.java:303)
+	at net.minecraft.world.chunk.WorldChunk.getBlockEntity(WorldChunk.java:326)
+	at net.minecraft.world.World.getBlockEntity(World.java:559)
+	at net.minecraft.server.network.ServerPlayerInteractionManager.tryBreakBlock(ServerPlayerInteractionManager.java:242)
+	at net.minecraft.server.network.ServerPlayerInteractionManager.finishMining(ServerPlayerInteractionManager.java:228)
+	at net.minecraft.server.network.ServerPlayerInteractionManager.processBlockBreakingAction(ServerPlayerInteractionManager.java:159)
+	at net.minecraft.server.network.ServerPlayNetworkHandler.onPlayerAction(ServerPlayNetworkHandler.java:1083)
+	at net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket.apply(PlayerActionC2SPacket.java:42)
+	at net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket.apply(PlayerActionC2SPacket.java:8)
+	at net.minecraft.network.NetworkThreadUtils.method_11072(NetworkThreadUtils.java:22)
+	at net.minecraft.server.ServerTask.run(ServerTask.java:18)
+	at net.minecraft.util.thread.ThreadExecutor.executeTask(ThreadExecutor.java:156)
+	at net.minecraft.util.thread.ReentrantThreadExecutor.executeTask(ReentrantThreadExecutor.java:23)
+	at net.minecraft.server.MinecraftServer.executeTask(MinecraftServer.java:782)
+	at net.minecraft.server.MinecraftServer.executeTask(MinecraftServer.java:164)
+	at net.minecraft.util.thread.ThreadExecutor.runTask(ThreadExecutor.java:130)
+	at net.minecraft.server.MinecraftServer.runOneTask(MinecraftServer.java:764)
+	at net.minecraft.server.MinecraftServer.runTask(MinecraftServer.java:758)
+	at net.minecraft.util.thread.ThreadExecutor.runTasks(ThreadExecutor.java:139)
+	at net.minecraft.server.MinecraftServer.runTasksTillTickEnd(MinecraftServer.java:743)
+	at net.minecraft.server.MinecraftServer.runServer(MinecraftServer.java:675)
+	at net.minecraft.server.MinecraftServer.method_29739(MinecraftServer.java:265)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: java.lang.IllegalStateException: Registry is already frozen (trying to add key ResourceKey[minecraft:block_entity_type / chemistry:beaker_liquid])
+	at net.minecraft.registry.SimpleRegistry.assertNotFrozen(SimpleRegistry.java:135)
+	at net.minecraft.registry.SimpleRegistry.set(SimpleRegistry.java:141)
+	at net.minecraft.registry.SimpleRegistry.add(SimpleRegistry.java:186)
+	at net.minecraft.registry.Registry.register(Registry.java:118)
+	at net.minecraft.registry.Registry.register(Registry.java:114)
+	at org.keke.chemistry.entity.ModBlockEntities.<clinit>(ModBlockEntities.java:13)
+	... 25 more
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- System Details --
+Details:
+	Minecraft Version: 1.20.1
+	Minecraft Version ID: 1.20.1
+	Operating System: Mac OS X (aarch64) version 14.0
+	Java Version: 17.0.8, Oracle Corporation
+	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode, sharing), Oracle Corporation
+	Memory: 1273860368 bytes (1214 MiB) / 2036334592 bytes (1942 MiB) up to 4294967296 bytes (4096 MiB)
+	CPUs: 8
+	Processor Vendor: Apple Inc.
+	Processor Name: Apple M2
+	Identifier: Apple Inc. Family 0xda33d83d Model 0 Stepping 0
+	Microarchitecture: ARM64 SoC: Avalanche + Blizzard
+	Frequency (GHz): 3.50
+	Number of physical packages: 1
+	Number of physical CPUs: 8
+	Number of logical CPUs: 8
+	Graphics card #0 name: Apple M2
+	Graphics card #0 vendor: Apple (0x106b)
+	Graphics card #0 VRAM (MB): 0.00
+	Graphics card #0 deviceId: unknown
+	Graphics card #0 versionInfo: unknown
+	Memory slot #0 capacity (MB): 0.00
+	Memory slot #0 clockSpeed (GHz): 0.00
+	Memory slot #0 type: unknown
+	Virtual memory max (MB): 16384.00
+	Virtual memory used (MB): 12927.44
+	Swap memory total (MB): 0.00
+	Swap memory used (MB): 0.00
+	JVM Flags: 0 total; 
+	Fabric Mods: 
+		chemistry: chemistry 1.0-SNAPSHOT
+		fabric-api: Fabric API 0.91.0+1.20.1
+		fabric-api-base: Fabric API Base 0.4.30+7abfd51577
+		fabric-api-lookup-api-v1: Fabric API Lookup API (v1) 1.6.35+4d8536c977
+		fabric-biome-api-v1: Fabric Biome API (v1) 13.0.12+215bbe9677
+		fabric-block-api-v1: Fabric Block API (v1) 1.0.10+92a0d36777
+		fabric-block-view-api-v2: Fabric BlockView API (v2) 1.0.0+92a0d36777
+		fabric-blockrenderlayer-v1: Fabric BlockRenderLayer Registration (v1) 1.1.40+b3afc78b77
+		fabric-client-tags-api-v1: Fabric Client Tags 1.1.1+97bb207577
+		fabric-command-api-v1: Fabric Command API (v1) 1.2.33+f71b366f77
+		fabric-command-api-v2: Fabric Command API (v2) 2.2.12+b3afc78b77
+		fabric-commands-v0: Fabric Commands (v0) 0.2.50+df3654b377
+		fabric-containers-v0: Fabric Containers (v0) 0.1.63+df3654b377
+		fabric-content-registries-v0: Fabric Content Registries (v0) 4.0.10+57aed33f77
+		fabric-convention-tags-v1: Fabric Convention Tags 1.5.4+a1a980da77
+		fabric-crash-report-info-v1: Fabric Crash Report Info (v1) 0.2.18+aeb40ebe77
+		fabric-data-generation-api-v1: Fabric Data Generation API (v1) 12.3.3+d7b148e077
+		fabric-dimensions-v1: Fabric Dimensions API (v1) 2.1.53+8536527b77
+		fabric-entity-events-v1: Fabric Entity Events (v1) 1.5.22+b3afc78b77
+		fabric-events-interaction-v0: Fabric Events Interaction (v0) 0.6.1+e91849a877
+		fabric-events-lifecycle-v0: Fabric Events Lifecycle (v0) 0.2.62+df3654b377
+		fabric-game-rule-api-v1: Fabric Game Rule API (v1) 1.0.39+ae9f657a77
+		fabric-gametest-api-v1: Fabric Game Test API (v1) 1.2.12+b3afc78b77
+		fabric-item-api-v1: Fabric Item API (v1) 2.1.27+b3afc78b77
+		fabric-item-group-api-v1: Fabric Item Group API (v1) 4.0.11+d7b148e077
+		fabric-key-binding-api-v1: Fabric Key Binding API (v1) 1.0.36+fb8d95da77
+		fabric-keybindings-v0: Fabric Key Bindings (v0) 0.2.34+df3654b377
+		fabric-lifecycle-events-v1: Fabric Lifecycle Events (v1) 2.2.21+b3afc78b77
+		fabric-loot-api-v2: Fabric Loot API (v2) 1.2.0+96dfa95977
+		fabric-loot-tables-v1: Fabric Loot Tables (v1) 1.1.44+9e7660c677
+		fabric-message-api-v1: Fabric Message API (v1) 5.1.8+d7b148e077
+		fabric-mining-level-api-v1: Fabric Mining Level API (v1) 2.1.49+b3afc78b77
+		fabric-model-loading-api-v1: Fabric Model Loading API (v1) 1.0.2+709a987177
+		fabric-models-v0: Fabric Models (v0) 0.4.1+9386d8a777
+		fabric-networking-api-v1: Fabric Networking API (v1) 1.3.10+eeb8eb3677
+		fabric-networking-v0: Fabric Networking (v0) 0.3.50+df3654b377
+		fabric-object-builder-api-v1: Fabric Object Builder API (v1) 11.1.2+4ee0bc6077
+		fabric-particles-v1: Fabric Particles (v1) 1.1.1+201a23a077
+		fabric-recipe-api-v1: Fabric Recipe API (v1) 1.0.20+b3afc78b77
+		fabric-registry-sync-v0: Fabric Registry Sync (v0) 2.3.2+4df89eb277
+		fabric-renderer-api-v1: Fabric Renderer API (v1) 3.2.0+39a511ba77
+		fabric-renderer-indigo: Fabric Renderer - Indigo 1.5.0+39a511ba77
+		fabric-renderer-registries-v1: Fabric Renderer Registries (v1) 3.2.45+df3654b377
+		fabric-rendering-data-attachment-v1: Fabric Rendering Data Attachment (v1) 0.3.36+92a0d36777
+		fabric-rendering-fluids-v1: Fabric Rendering Fluids (v1) 3.0.27+b3afc78b77
+		fabric-rendering-v0: Fabric Rendering (v0) 1.1.48+df3654b377
+		fabric-rendering-v1: Fabric Rendering (v1) 3.0.7+b3afc78b77
+		fabric-resource-conditions-api-v1: Fabric Resource Conditions API (v1) 2.3.7+29de845d77
+		fabric-resource-loader-v0: Fabric Resource Loader (v0) 0.11.9+132c48c177
+		fabric-screen-api-v1: Fabric Screen API (v1) 2.0.7+b3afc78b77
+		fabric-screen-handler-api-v1: Fabric Screen Handler API (v1) 1.3.29+b3afc78b77
+		fabric-sound-api-v1: Fabric Sound API (v1) 1.0.12+b3afc78b77
+		fabric-transfer-api-v1: Fabric Transfer API (v1) 3.3.3+c81d263177
+		fabric-transitive-access-wideners-v1: Fabric Transitive Access Wideners (v1) 4.3.0+6c31357e77
+		fabricloader: Fabric Loader 0.15.3
+			mixinextras: MixinExtras 0.3.2
+		java: Java HotSpot(TM) 64-Bit Server VM 17
+		minecraft: Minecraft 1.20.1
+	Server Running: true
+	Player Count: 1 / 8; [ServerPlayerEntity['Player621'/194, l='ServerLevel[chemistry test]', x=-77.33, y=64.00, z=84.28]]
+	Data Packs: vanilla, fabric
+	Enabled Feature Flags: minecraft:vanilla
+	World Generation: Stable
+	Type: Integrated Server (map_client.txt)
+	Is Modded: Definitely; Client brand changed to 'fabric'; Server brand changed to 'fabric'
+	Launched Version: Fabric

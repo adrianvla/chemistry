@@ -1,0 +1,6 @@
+{
+  "itemGroup.chemistry.containers": "Containers",
+  "item.chemistry.beaker": "Beaker",
+  "block.chemistry.beaker_base": "Beaker",
+  "block.chemistry.beaker_liquid_item_block": "Beaker Liquid"
+}

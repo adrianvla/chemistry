@@ -1,0 +1,23 @@
+{
+  "minecraft:recipes/food/cake": {
+    "criteria": {
+      "has_egg": "2023-12-22 19:50:05 +0100"
+    },
+    "done": true
+  },
+  "minecraft:recipes/decorations/crafting_table": {
+    "criteria": {
+      "unlock_right_away": "2023-12-22 19:46:41 +0100"
+    },
+    "done": true
+  },
+  "minecraft:adventure/adventuring_time": {
+    "criteria": {
+      "minecraft:beach": "2023-12-22 19:50:08 +0100",
+      "minecraft:river": "2023-12-22 19:46:52 +0100",
+      "minecraft:plains": "2023-12-22 19:46:42 +0100"
+    },
+    "done": false
+  },
+  "DataVersion": 3465
+}
