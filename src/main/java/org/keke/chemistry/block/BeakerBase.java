@@ -4,13 +4,21 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
+import net.minecraft.util.Hand;
 import net.minecraft.util.function.BooleanBiFunction;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
@@ -19,6 +27,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.keke.chemistry.entity.BeakerLiquidBlockEntity;
 import org.keke.chemistry.entity.ModBlockEntities;
+import org.keke.chemistry.item.ModItems;
 
 import java.util.stream.Stream;
 
@@ -28,22 +37,68 @@ public class BeakerBase extends BlockWithEntity implements BlockEntityProvider {
     public BeakerBase(Settings settings) {
         super(settings);
     }
+
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new BeakerLiquidBlockEntity(pos, state);
     }
+
     @Override
     public BlockRenderType getRenderType(BlockState state) {
-        // With inheriting from BlockWithEntity this defaults to INVISIBLE, so we need to change that!
         return BlockRenderType.MODEL;
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-//        return checkType
         return checkType(type, ModBlockEntities.BEAKER_LIQUID, (World world1, BlockPos pos, BlockState state1, BeakerLiquidBlockEntity be) -> BeakerLiquidBlockEntity.tick(world1, pos, state1, be));
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        if (!world.isClient) {
+            BlockEntity be = world.getBlockEntity(pos);
+            if (be instanceof BeakerLiquidBlockEntity beakerEntity) {
+                ItemStack heldItem = player.getStackInHand(hand);
+
+                // Shift + empty hand: pick up the beaker
+                if (player.isSneaking() && heldItem.isEmpty()) {
+                    ItemStack beakerStack = new ItemStack(ModItems.BEAKER);
+                    if (!beakerEntity.isEmpty()) {
+                        NbtCompound entityNbt = beakerEntity.getContentsNbt();
+                        beakerStack.getOrCreateNbt().copyFrom(entityNbt);
+                    } else {
+                        // Preserve beaker size even when empty
+                        beakerStack.getOrCreateNbt().putDouble("maxCapacityMl", beakerEntity.getMaxCapacityMl());
+                    }
+                    world.removeBlock(pos, false);
+                    player.setStackInHand(hand, beakerStack);
+                    world.playSound(null, pos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5f, 1.2f);
+                    return ActionResult.SUCCESS;
+                }
+            }
+        }
+        return ActionResult.PASS;
+    }
+
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+        if (!state.isOf(newState.getBlock())) {
+            BlockEntity be = world.getBlockEntity(pos);
+            if (be instanceof BeakerLiquidBlockEntity beakerEntity) {
+                ItemStack drop = new ItemStack(ModItems.BEAKER);
+                if (!beakerEntity.isEmpty()) {
+                    NbtCompound entityNbt = beakerEntity.getContentsNbt();
+                    drop.getOrCreateNbt().copyFrom(entityNbt);
+                } else {
+                    // Preserve beaker size even when empty
+                    drop.getOrCreateNbt().putDouble("maxCapacityMl", beakerEntity.getMaxCapacityMl());
+                }
+                dropStack(world, pos, drop);
+            }
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
     private static final VoxelShape SHAPE_N = Stream.of(
             Block.createCuboidShape(5, 1, 6, 6, 7, 10),
@@ -109,7 +164,7 @@ public class BeakerBase extends BlockWithEntity implements BlockEntityProvider {
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return this.getDefaultState().with(FACING,ctx.getPlayerLookDirection().getOpposite());
+        return this.getDefaultState().with(FACING,ctx.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override

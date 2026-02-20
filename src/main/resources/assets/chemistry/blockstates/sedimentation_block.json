@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "active=false": { "model": "chemistry:block/sedimentation_block" },
+    "active=true": { "model": "chemistry:block/sedimentation_block_active" }
+  }
+}

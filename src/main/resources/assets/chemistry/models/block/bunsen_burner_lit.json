@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "base": "minecraft:block/smooth_stone",
+    "tube": "minecraft:block/iron_block",
+    "flame": "minecraft:block/magma"
+  },
+  "elements": [
+    {
+      "comment": "base plate",
+      "from": [4, 0, 4],
+      "to": [12, 2, 12],
+      "faces": {
+        "up":    { "texture": "#base" },
+        "down":  { "texture": "#base", "cullface": "down" },
+        "north": { "texture": "#base" },
+        "south": { "texture": "#base" },
+        "east":  { "texture": "#base" },
+        "west":  { "texture": "#base" }
+      }
+    },
+    {
+      "comment": "burner tube",
+      "from": [6, 2, 6],
+      "to": [10, 12, 10],
+      "faces": {
+        "up":    { "texture": "#flame" },
+        "north": { "texture": "#tube" },
+        "south": { "texture": "#tube" },
+        "east":  { "texture": "#tube" },
+        "west":  { "texture": "#tube" }
+      }
+    }
+  ]
+}

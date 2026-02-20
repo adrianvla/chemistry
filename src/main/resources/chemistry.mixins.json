@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.keke.chemistry.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "CauldronBeakerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

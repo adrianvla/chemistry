@@ -1,0 +1,21 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "dish": "minecraft:block/terracotta"
+  },
+  "elements": [
+    {
+      "comment": "dish basin",
+      "from": [2, 0, 2],
+      "to": [14, 4, 14],
+      "faces": {
+        "up":    { "texture": "#dish" },
+        "down":  { "texture": "#dish", "cullface": "down" },
+        "north": { "texture": "#dish" },
+        "south": { "texture": "#dish" },
+        "east":  { "texture": "#dish" },
+        "west":  { "texture": "#dish" }
+      }
+    }
+  ]
+}

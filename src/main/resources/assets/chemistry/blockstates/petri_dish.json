@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "chemistry:block/petri_dish" },
+    "facing=east": { "model": "chemistry:block/petri_dish", "y": 90 },
+    "facing=south": { "model": "chemistry:block/petri_dish", "y": 180 },
+    "facing=west": { "model": "chemistry:block/petri_dish", "y": 270 }
+  }
+}

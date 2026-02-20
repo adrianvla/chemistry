@@ -1,0 +1,49 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "body": "minecraft:block/iron_block",
+    "top": "minecraft:block/lime_glazed_terracotta",
+    "base": "minecraft:block/smooth_stone"
+  },
+  "elements": [
+    {
+      "comment": "base plate",
+      "from": [0, 0, 0],
+      "to": [16, 2, 16],
+      "faces": {
+        "up":    { "texture": "#base" },
+        "down":  { "texture": "#base", "cullface": "down" },
+        "north": { "texture": "#base" },
+        "south": { "texture": "#base" },
+        "east":  { "texture": "#base" },
+        "west":  { "texture": "#base" }
+      }
+    },
+    {
+      "comment": "machine body",
+      "from": [2, 2, 2],
+      "to": [14, 10, 14],
+      "faces": {
+        "up":    { "texture": "#body" },
+        "down":  { "texture": "#body" },
+        "north": { "texture": "#body" },
+        "south": { "texture": "#body" },
+        "east":  { "texture": "#body" },
+        "west":  { "texture": "#body" }
+      }
+    },
+    {
+      "comment": "nozzle top",
+      "from": [4, 10, 4],
+      "to": [12, 12, 12],
+      "faces": {
+        "up":    { "texture": "#top" },
+        "down":  { "texture": "#top" },
+        "north": { "texture": "#top" },
+        "south": { "texture": "#top" },
+        "east":  { "texture": "#top" },
+        "west":  { "texture": "#top" }
+      }
+    }
+  ]
+}

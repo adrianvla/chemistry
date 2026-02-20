@@ -1,0 +1,6 @@
+{
+  "variants": {
+    "active=false": { "model": "chemistry:block/vibrating_block" },
+    "active=true": { "model": "chemistry:block/vibrating_block_active" }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "chemistry:block/evaporation_dish" },
+    "facing=east": { "model": "chemistry:block/evaporation_dish", "y": 90 },
+    "facing=south": { "model": "chemistry:block/evaporation_dish", "y": 180 },
+    "facing=west": { "model": "chemistry:block/evaporation_dish", "y": 270 }
+  }
+}

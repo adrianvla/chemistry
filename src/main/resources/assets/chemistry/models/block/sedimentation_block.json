@@ -1,0 +1,23 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "top": "minecraft:block/smooth_stone",
+    "side": "minecraft:block/iron_block",
+    "bottom": "minecraft:block/iron_block"
+  },
+  "elements": [
+    {
+      "comment": "sedimentation base platform",
+      "from": [1, 0, 1],
+      "to": [15, 8, 15],
+      "faces": {
+        "up":    { "texture": "#top" },
+        "down":  { "texture": "#bottom", "cullface": "down" },
+        "north": { "texture": "#side" },
+        "south": { "texture": "#side" },
+        "east":  { "texture": "#side" },
+        "west":  { "texture": "#side" }
+      }
+    }
+  ]
+}

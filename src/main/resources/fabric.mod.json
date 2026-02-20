@@ -19,6 +19,9 @@
       "org.keke.chemistry.Chemistry"
     ]
   },
+  "mixins": [
+    "chemistry.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",

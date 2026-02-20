@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "chemistry:block/distillation" },
+    "facing=east": { "model": "chemistry:block/distillation", "y": 90 },
+    "facing=south": { "model": "chemistry:block/distillation", "y": 180 },
+    "facing=west": { "model": "chemistry:block/distillation", "y": 270 }
+  }
+}

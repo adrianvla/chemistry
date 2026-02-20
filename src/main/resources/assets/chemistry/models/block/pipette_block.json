@@ -1,0 +1,49 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "body": "minecraft:block/iron_block",
+    "tube": "minecraft:block/quartz_pillar",
+    "base": "minecraft:block/smooth_stone"
+  },
+  "elements": [
+    {
+      "comment": "base plate",
+      "from": [0, 0, 0],
+      "to": [16, 2, 16],
+      "faces": {
+        "up":    { "texture": "#base" },
+        "down":  { "texture": "#base", "cullface": "down" },
+        "north": { "texture": "#base" },
+        "south": { "texture": "#base" },
+        "east":  { "texture": "#base" },
+        "west":  { "texture": "#base" }
+      }
+    },
+    {
+      "comment": "body",
+      "from": [3, 2, 3],
+      "to": [13, 8, 13],
+      "faces": {
+        "up":    { "texture": "#body" },
+        "down":  { "texture": "#body" },
+        "north": { "texture": "#body" },
+        "south": { "texture": "#body" },
+        "east":  { "texture": "#body" },
+        "west":  { "texture": "#body" }
+      }
+    },
+    {
+      "comment": "pipette tube",
+      "from": [6, 8, 6],
+      "to": [10, 14, 10],
+      "faces": {
+        "up":    { "texture": "#tube" },
+        "down":  { "texture": "#tube" },
+        "north": { "texture": "#tube" },
+        "south": { "texture": "#tube" },
+        "east":  { "texture": "#tube" },
+        "west":  { "texture": "#tube" }
+      }
+    }
+  ]
+}
