@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.keke.chemistry.entity.BeakerLiquidBlockEntity;
 import org.keke.chemistry.entity.ModBlockEntities;
+import org.keke.chemistry.item.BeakerItem;
 import org.keke.chemistry.item.ModItems;
 
 import java.util.stream.Stream;
@@ -72,6 +73,8 @@ public class BeakerBase extends BlockWithEntity implements BlockEntityProvider {
                         // Preserve beaker size even when empty
                         beakerStack.getOrCreateNbt().putDouble("maxCapacityMl", beakerEntity.getMaxCapacityMl());
                     }
+                    // Preserve beaker material
+                    BeakerItem.setBeakerMaterial(beakerStack, beakerEntity.getBeakerMaterial());
                     world.removeBlock(pos, false);
                     player.setStackInHand(hand, beakerStack);
                     world.playSound(null, pos, SoundEvents.BLOCK_GLASS_BREAK, SoundCategory.BLOCKS, 0.5f, 1.2f);
@@ -95,6 +98,8 @@ public class BeakerBase extends BlockWithEntity implements BlockEntityProvider {
                     // Preserve beaker size even when empty
                     drop.getOrCreateNbt().putDouble("maxCapacityMl", beakerEntity.getMaxCapacityMl());
                 }
+                // Preserve beaker material
+                BeakerItem.setBeakerMaterial(drop, beakerEntity.getBeakerMaterial());
                 dropStack(world, pos, drop);
             }
         }

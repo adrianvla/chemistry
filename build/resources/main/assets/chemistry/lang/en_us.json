@@ -25,5 +25,29 @@
   "block.chemistry.sedimentation_block": "Sedimentation Machine",
   "item.chemistry.sedimentation_block": "Sedimentation Machine",
   "block.chemistry.vibrating_block": "Vibrating Machine",
-  "item.chemistry.vibrating_block": "Vibrating Machine"
+  "item.chemistry.vibrating_block": "Vibrating Machine",
+
+  "block.chemistry.test_tube": "Test Tube",
+  "item.chemistry.test_tube": "Test Tube",
+  "block.chemistry.ampule": "Ampule",
+  "item.chemistry.ampule": "Ampule",
+  "block.chemistry.bottle": "Chemistry Bottle",
+  "item.chemistry.bottle": "Chemistry Bottle",
+  "item.chemistry.pliers": "Pliers",
+  "item.chemistry.wash_bottle": "Wash Bottle",
+  "block.chemistry.crucible": "Crucible",
+  "item.chemistry.crucible": "Crucible",
+  "block.chemistry.gas_collector": "Gas Collector",
+  "item.chemistry.gas_collector": "Gas Collector",
+  "block.chemistry.condenser": "Condenser",
+  "item.chemistry.condenser": "Condenser",
+  "block.chemistry.mortar_pestle": "Mortar and Pestle",
+  "item.chemistry.mortar_pestle": "Mortar and Pestle",
+  "block.chemistry.fume_hood": "Fume Hood",
+  "item.chemistry.fume_hood": "Fume Hood",
+
+  "death.attack.lab_accident": "%1$s had a lab accident",
+  "death.attack.lab_accident.player": "%1$s had a lab accident whilst fighting %2$s",
+
+  "entity.chemistry.thrown_container": "Thrown Container"
 }

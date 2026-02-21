@@ -45,7 +45,7 @@ public class IonicCompound {
             "ClO4", "ClO3", "MnO4", "CrO4",
             "C2O4", "SiO3",
             "SO4", "SO3", "NO3", "CO3", "PO4",
-            "SCN", "CN", "OH"
+            "SCN", "CN", "OH", "N3"
     );
 
     /**

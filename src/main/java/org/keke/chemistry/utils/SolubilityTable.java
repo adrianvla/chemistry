@@ -72,6 +72,7 @@ public class SolubilityTable {
         ANION_CHARGES.put("HPO4", -2);
         ANION_CHARGES.put("CH3COO", -1); // acetate
         ANION_CHARGES.put("SiO3", -2);
+        ANION_CHARGES.put("N3", -1);     // azide
 
         // Common cation charges
         CATION_CHARGES.put("H", 1);

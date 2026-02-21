@@ -93,6 +93,9 @@ public class PetriDishBlockEntity extends AbstractChemistryContainer {
         if (world.isClient) return;
         if (dish.isEmpty()) return;
 
+        // Heating from bunsen burner below
+        dish.tickHeatingFromBelow();
+
         // Newton's law of cooling (faster for shallow dish)
         if (Math.abs(dish.temperatureK - AMBIENT_TEMP_K) > 0.01) {
             dish.temperatureK -= COOLING_K * (dish.temperatureK - AMBIENT_TEMP_K);

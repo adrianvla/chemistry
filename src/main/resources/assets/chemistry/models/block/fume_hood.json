@@ -1,0 +1,79 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "iron": "minecraft:block/iron_block",
+    "glass": "minecraft:block/glass"
+  },
+  "elements": [
+    {
+      "comment": "hood base",
+      "from": [0, 0, 0],
+      "to": [16, 2, 16],
+      "faces": {
+        "up":    { "texture": "#iron" },
+        "down":  { "texture": "#iron", "cullface": "down" },
+        "north": { "texture": "#iron" },
+        "south": { "texture": "#iron" },
+        "east":  { "texture": "#iron" },
+        "west":  { "texture": "#iron" }
+      }
+    },
+    {
+      "comment": "hood back wall",
+      "from": [0, 2, 14],
+      "to": [16, 16, 16],
+      "faces": {
+        "up":    { "texture": "#iron" },
+        "north": { "texture": "#iron" },
+        "south": { "texture": "#iron", "cullface": "south" },
+        "east":  { "texture": "#iron" },
+        "west":  { "texture": "#iron" }
+      }
+    },
+    {
+      "comment": "hood left wall",
+      "from": [0, 2, 0],
+      "to": [2, 16, 14],
+      "faces": {
+        "up":    { "texture": "#iron" },
+        "north": { "texture": "#iron" },
+        "south": { "texture": "#iron" },
+        "east":  { "texture": "#iron" },
+        "west":  { "texture": "#iron", "cullface": "west" }
+      }
+    },
+    {
+      "comment": "hood right wall",
+      "from": [14, 2, 0],
+      "to": [16, 16, 14],
+      "faces": {
+        "up":    { "texture": "#iron" },
+        "north": { "texture": "#iron" },
+        "south": { "texture": "#iron" },
+        "east":  { "texture": "#iron", "cullface": "east" },
+        "west":  { "texture": "#iron" }
+      }
+    },
+    {
+      "comment": "hood top",
+      "from": [0, 14, 0],
+      "to": [16, 16, 14],
+      "faces": {
+        "up":    { "texture": "#iron", "cullface": "up" },
+        "down":  { "texture": "#iron" },
+        "north": { "texture": "#iron" },
+        "east":  { "texture": "#iron" },
+        "west":  { "texture": "#iron" }
+      }
+    },
+    {
+      "comment": "glass front panel",
+      "from": [2, 6, 0],
+      "to": [14, 14, 1],
+      "faces": {
+        "north": { "texture": "#glass" },
+        "south": { "texture": "#glass" }
+      }
+    }
+  ]
+}

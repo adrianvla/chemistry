@@ -129,6 +129,24 @@ public class BeakerItem extends Item {
     }
 
     /**
+     * Get the beaker material (GLASS or METAL), defaulting to GLASS.
+     */
+    public static org.keke.chemistry.utils.BeakerMaterial getBeakerMaterial(ItemStack stack) {
+        NbtCompound nbt = stack.getNbt();
+        if (nbt != null && nbt.contains("beakerMaterial")) {
+            return org.keke.chemistry.utils.BeakerMaterial.fromName(nbt.getString("beakerMaterial"));
+        }
+        return org.keke.chemistry.utils.BeakerMaterial.GLASS;
+    }
+
+    /**
+     * Set the beaker material in NBT.
+     */
+    public static void setBeakerMaterial(ItemStack stack, org.keke.chemistry.utils.BeakerMaterial material) {
+        stack.getOrCreateNbt().putString("beakerMaterial", material.name());
+    }
+
+    /**
      * Get the temperature in Kelvin stored in item NBT (defaults to ambient 293.15 K).
      */
     public static double getTemperatureK(ItemStack stack) {
@@ -143,12 +161,14 @@ public class BeakerItem extends Item {
     public Text getName(ItemStack stack) {
         Map<String, Double> contents = getContents(stack);
         BeakerSize size = getBeakerSize(stack);
+        org.keke.chemistry.utils.BeakerMaterial material = getBeakerMaterial(stack);
         String sizeLabel = (size == BeakerSize.MEDIUM) ? "Beaker" : size.getDisplayName();
+        String prefix = (material == org.keke.chemistry.utils.BeakerMaterial.METAL) ? "Metal " : "";
         if (contents.isEmpty()) {
-            return Text.literal(sizeLabel);
+            return Text.literal(prefix + sizeLabel);
         }
         StringBuilder sb = new StringBuilder();
-        sb.append(sizeLabel).append(" (");
+        sb.append(prefix).append(sizeLabel).append(" (");
         boolean first = true;
         for (String formula : contents.keySet()) {
             if (!first) sb.append(", ");
@@ -270,6 +290,9 @@ public class BeakerItem extends Item {
                     // Set capacity before contents so volume checking uses correct limit
                     BeakerSize size = getBeakerSize(stack);
                     beakerEntity.setMaxCapacityMl(size.getCapacityMl());
+
+                    // Transfer material (GLASS or METAL)
+                    beakerEntity.setBeakerMaterial(getBeakerMaterial(stack));
 
                     Map<String, Double> contents = getContents(stack);
                     if (!contents.isEmpty()) {

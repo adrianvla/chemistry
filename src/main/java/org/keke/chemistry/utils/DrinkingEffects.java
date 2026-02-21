@@ -1,7 +1,6 @@
 package org.keke.chemistry.utils;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
@@ -199,7 +198,7 @@ public class DrinkingEffects {
                 entity.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.NAUSEA, durationTicks, 0));
                 if (intensityLevel >= 2) {
-                    entity.damage(entity.getDamageSources().magic(), 1.0f + intensityLevel);
+                    entity.damage(ModDamageSources.labAccident(entity.getWorld()), 1.0f + intensityLevel);
                 }
                 break;
 
@@ -207,7 +206,7 @@ public class DrinkingEffects {
                 // Strong acids: instant damage + nausea
                 durationTicks = 100 + intensityLevel * 100; // 5-25 sec
                 float acidDamage = 2.0f + intensityLevel * 3.0f; // 5-11 damage (2.5-5.5 hearts)
-                entity.damage(entity.getDamageSources().magic(), acidDamage);
+                entity.damage(ModDamageSources.labAccident(entity.getWorld()), acidDamage);
                 entity.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.NAUSEA, durationTicks, intensityLevel - 1));
                 entity.addStatusEffect(new StatusEffectInstance(
@@ -218,7 +217,7 @@ public class DrinkingEffects {
                 // Strong bases: instant damage + blindness (saponification of tissue)
                 durationTicks = 100 + intensityLevel * 80;
                 float baseDamage = 2.0f + intensityLevel * 2.5f;
-                entity.damage(entity.getDamageSources().magic(), baseDamage);
+                entity.damage(ModDamageSources.labAccident(entity.getWorld()), baseDamage);
                 entity.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.NAUSEA, durationTicks, intensityLevel - 1));
                 entity.addStatusEffect(new StatusEffectInstance(
@@ -244,7 +243,7 @@ public class DrinkingEffects {
                 // Oxidizers: instant damage + weakness
                 durationTicks = 100 + intensityLevel * 100;
                 float oxDamage = 3.0f + intensityLevel * 3.0f;
-                entity.damage(entity.getDamageSources().magic(), oxDamage);
+                entity.damage(ModDamageSources.labAccident(entity.getWorld()), oxDamage);
                 entity.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.WEAKNESS, durationTicks, intensityLevel - 1));
                 entity.addStatusEffect(new StatusEffectInstance(
@@ -264,7 +263,7 @@ public class DrinkingEffects {
                 if (contents.containsKey("CH3OH")) {
                     entity.addStatusEffect(new StatusEffectInstance(
                             StatusEffects.BLINDNESS, durationTicks, 0));
-                    entity.damage(entity.getDamageSources().magic(), 4.0f * intensityLevel);
+                    entity.damage(ModDamageSources.labAccident(entity.getWorld()), 4.0f * intensityLevel);
                 }
                 break;
 
@@ -275,13 +274,13 @@ public class DrinkingEffects {
                         StatusEffects.MINING_FATIGUE, durationTicks, intensityLevel));
                 entity.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.SLOWNESS, durationTicks, intensityLevel));
-                entity.damage(entity.getDamageSources().magic(), intensityLevel * 2.0f);
+                entity.damage(ModDamageSources.labAccident(entity.getWorld()), intensityLevel * 2.0f);
                 break;
 
             case TOXIC_GAS:
                 // Severe respiratory damage
                 durationTicks = 100 + intensityLevel * 150;
-                entity.damage(entity.getDamageSources().magic(), 3.0f + intensityLevel * 4.0f);
+                entity.damage(ModDamageSources.labAccident(entity.getWorld()), 3.0f + intensityLevel * 4.0f);
                 entity.addStatusEffect(new StatusEffectInstance(
                         StatusEffects.POISON, durationTicks, intensityLevel));
                 entity.addStatusEffect(new StatusEffectInstance(

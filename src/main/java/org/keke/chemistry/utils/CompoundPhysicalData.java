@@ -123,7 +123,7 @@ public class CompoundPhysicalData {
         put("SiO2",  2.65,   1986.0, 2503.0);
 
         // ── Acids ──────────────────────────────────────────────────────
-        put("HCl",   0.00163, 159.0,  188.1);  // gas at STP
+        put("HCl",   1.19,   247.0,  383.0);   // hydrochloric acid (aqueous, ~37%)
         put("HBr",   0.00363, 186.3,  206.8);
         put("HI",    0.00566, 222.4,  237.8);
         put("HF",    0.00082, 189.6,  292.7);
@@ -253,6 +253,22 @@ public class CompoundPhysicalData {
         put("Fe(SCN)3", 1.5,  473.0,  Double.NaN);  // estimate
         put("KSCN",    1.886, 446.0,  773.0);
         put("NaSCN",   1.735, 596.0,  Double.NaN);
+
+        // ── Explosives & precursors ────────────────────────────────────
+        put("C3H8O3",   1.261, 291.0, 563.0,  18.3, 91.7);  // glycerol
+        put("C7H8",     0.867, 178.2, 383.8,  6.64, 33.2);  // toluene
+        put("C3H5N3O9", 1.599, 286.2, Double.NaN);           // nitroglycerin (decomposes)
+        put("C7H5N3O6", 1.654, 354.0, 513.0);               // TNT
+        put("K2S",      1.80,  1113.0, Double.NaN);          // potassium sulfide
+
+        // ── Azides ─────────────────────────────────────────────────────
+        put("Ba(N3)2", 2.94,  593.0,  Double.NaN);  // decomposes ~320°C
+        put("NaN3",    1.846, 548.0,  Double.NaN);   // decomposes
+        put("Pb(N3)2", 4.71,  623.0,  Double.NaN);   // decomposes (explosive)
+
+        // ── Silane & Mg2Si ─────────────────────────────────────────────
+        put("SiH4",    0.00068, 88.5, 161.0);  // gas at STP
+        put("Mg2Si",   1.94,   1375.0, Double.NaN);
     }
 
     private static void put(String formula, double density, double mpK, double bpK) {

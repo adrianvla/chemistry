@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "glass": "minecraft:block/glass"
+  },
+  "elements": [
+    {
+      "comment": "test tube body",
+      "from": [6, 0, 6],
+      "to": [10, 10, 10],
+      "faces": {
+        "up":    { "texture": "#glass" },
+        "down":  { "texture": "#glass", "cullface": "down" },
+        "north": { "texture": "#glass" },
+        "south": { "texture": "#glass" },
+        "east":  { "texture": "#glass" },
+        "west":  { "texture": "#glass" }
+      }
+    },
+    {
+      "comment": "test tube rim",
+      "from": [5, 10, 5],
+      "to": [11, 12, 11],
+      "faces": {
+        "up":    { "texture": "#glass" },
+        "north": { "texture": "#glass" },
+        "south": { "texture": "#glass" },
+        "east":  { "texture": "#glass" },
+        "west":  { "texture": "#glass" }
+      }
+    }
+  ]
+}

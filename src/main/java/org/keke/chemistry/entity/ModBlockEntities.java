@@ -19,6 +19,16 @@ public class ModBlockEntities {
     public static BlockEntityType<SedimentationBlockEntity> SEDIMENTATION;
     public static BlockEntityType<VibratingBlockEntity> VIBRATING;
 
+    // New container block entities
+    public static BlockEntityType<TestTubeBlockEntity> TEST_TUBE;
+    public static BlockEntityType<AmpuleBlockEntity> AMPULE;
+    public static BlockEntityType<BottleBlockEntity> BOTTLE;
+
+    // New lab equipment block entities
+    public static BlockEntityType<CrucibleBlockEntity> CRUCIBLE;
+    public static BlockEntityType<GasCollectorBlockEntity> GAS_COLLECTOR;
+    public static BlockEntityType<CondenserBlockEntity> CONDENSER;
+
     public static void registerAllBlockEntities() {
         BEAKER_LIQUID = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
@@ -64,6 +74,36 @@ public class ModBlockEntities {
                 Registries.BLOCK_ENTITY_TYPE,
                 new Identifier(Chemistry.MOD_ID, "vibrating"),
                 FabricBlockEntityTypeBuilder.create(VibratingBlockEntity::new, ModBlocks.VIBRATING_BLOCK).build(null)
+        );
+        TEST_TUBE = Registry.register(
+                Registries.BLOCK_ENTITY_TYPE,
+                new Identifier(Chemistry.MOD_ID, "test_tube"),
+                FabricBlockEntityTypeBuilder.create(TestTubeBlockEntity::new, ModBlocks.TEST_TUBE).build(null)
+        );
+        AMPULE = Registry.register(
+                Registries.BLOCK_ENTITY_TYPE,
+                new Identifier(Chemistry.MOD_ID, "ampule"),
+                FabricBlockEntityTypeBuilder.create(AmpuleBlockEntity::new, ModBlocks.AMPULE).build(null)
+        );
+        BOTTLE = Registry.register(
+                Registries.BLOCK_ENTITY_TYPE,
+                new Identifier(Chemistry.MOD_ID, "bottle"),
+                FabricBlockEntityTypeBuilder.create(BottleBlockEntity::new, ModBlocks.BOTTLE).build(null)
+        );
+        CRUCIBLE = Registry.register(
+                Registries.BLOCK_ENTITY_TYPE,
+                new Identifier(Chemistry.MOD_ID, "crucible"),
+                FabricBlockEntityTypeBuilder.create(CrucibleBlockEntity::new, ModBlocks.CRUCIBLE).build(null)
+        );
+        GAS_COLLECTOR = Registry.register(
+                Registries.BLOCK_ENTITY_TYPE,
+                new Identifier(Chemistry.MOD_ID, "gas_collector"),
+                FabricBlockEntityTypeBuilder.create(GasCollectorBlockEntity::new, ModBlocks.GAS_COLLECTOR).build(null)
+        );
+        CONDENSER = Registry.register(
+                Registries.BLOCK_ENTITY_TYPE,
+                new Identifier(Chemistry.MOD_ID, "condenser"),
+                FabricBlockEntityTypeBuilder.create(CondenserBlockEntity::new, ModBlocks.CONDENSER).build(null)
         );
     }
 }

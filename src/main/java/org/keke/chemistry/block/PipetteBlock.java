@@ -19,7 +19,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import org.keke.chemistry.entity.BeakerLiquidBlockEntity;
+import org.keke.chemistry.entity.AbstractChemistryContainer;
 import org.keke.chemistry.screen.PipetteScreenHandler;
 
 import java.util.stream.Stream;
@@ -77,13 +77,13 @@ public class PipetteBlock extends Block {
     }
 
     /**
-     * Find a BeakerLiquidBlockEntity directly above this block.
+     * Find any AbstractChemistryContainer directly above this block.
      */
-    public static BeakerLiquidBlockEntity findBeakerAbove(World world, BlockPos pos) {
+    public static AbstractChemistryContainer findContainerAbove(World world, BlockPos pos) {
         BlockPos above = pos.up();
         BlockEntity be = world.getBlockEntity(above);
-        if (be instanceof BeakerLiquidBlockEntity beaker) {
-            return beaker;
+        if (be instanceof AbstractChemistryContainer container) {
+            return container;
         }
         return null;
     }

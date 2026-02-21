@@ -78,6 +78,7 @@ public class DecompositionPredictor {
             case "ClO3"  -> decomposeChlorate(cation, cationCount, anionCount, cationCharge);
             case "ClO4"  -> decomposPerchlorate(cation, cationCount, anionCount, cationCharge);
             case "SO3"   -> decomposeSulfite(cation, cationCount, anionCount, cationCharge);
+            case "N3"    -> decomposeAzide(cation, cationCount, anionCount, cationCharge);
             default -> {
                 // Check for metal oxide decomposition (e.g. HgO)
                 if ("O".equals(anion) && UNSTABLE_OXIDE_METALS.contains(cation)) {
@@ -165,12 +166,33 @@ public class DecompositionPredictor {
             );
         } else {
             // Heavy metal → oxide + NO2 + O2
+            // 2M(NO3)_n → M_2O_n + 2n·NO2 + (n/2)·O2
+            // If n is odd, scale by 2 for integer stoichiometry
             String oxide = buildOxide(cation, cationCount, anionCount, cationCharge);
+
+            int formulaCoeff;
+            int oxideCoeff;
+            int no2Coeff;
+            int o2Coeff;
+
+            if (anionCount % 2 == 0) {
+                formulaCoeff = 2;
+                oxideCoeff = 2;
+                no2Coeff = 2 * anionCount;
+                o2Coeff = anionCount / 2;
+            } else {
+                // Scale ×2: 4M(NO3)_n → 2 M_2O_n + 4n·NO2 + n·O2
+                formulaCoeff = 4;
+                oxideCoeff = 4;
+                no2Coeff = 4 * anionCount;
+                o2Coeff = anionCount;
+            }
+
             return buildReaction(
-                    List.of(new ReactionComponent(formula, 2)),
-                    List.of(new ReactionComponent(oxide, 2),
-                            new ReactionComponent("NO2", 2 * anionCount),
-                            new ReactionComponent("O2", anionCount)),
+                    List.of(new ReactionComponent(formula, formulaCoeff)),
+                    List.of(new ReactionComponent(oxide, oxideCoeff),
+                            new ReactionComponent("NO2", no2Coeff),
+                            new ReactionComponent("O2", o2Coeff)),
                     EnumSet.of(ReactionEffect.GAS_EVOLUTION, ReactionEffect.COLOR_CHANGE,
                             ReactionEffect.ENDOTHERMIC)
             );
@@ -232,6 +254,41 @@ public class DecompositionPredictor {
                 List.of(new ReactionComponent(cation, 2 * cationCount),
                         new ReactionComponent("O2", anionCount)),
                 EnumSet.of(ReactionEffect.GAS_EVOLUTION, ReactionEffect.ENDOTHERMIC)
+        );
+    }
+
+    /**
+     * M_a(N3)_b → a·M + (3b/2)·N2
+     * Azide decomposition: releases the metal and nitrogen gas.
+     * e.g. Ba(N3)2 → Ba + 3N2
+     *      NaN3 → Na + 3/2 N2 → scaled: 2NaN3 → 2Na + 3N2
+     */
+    private static Reaction decomposeAzide(String cation, int cationCount,
+                                            int anionCount, int cationCharge) {
+        String formula = buildFormula(cation, cationCount, "N3", anionCount);
+
+        // Each N3 yields 3/2 N2.  b azide groups → 3b/2 N2 per formula unit.
+        // To get integer coefficients: multiply formula by 2 if 3*anionCount is odd.
+        int n2Numerator = 3 * anionCount;  // numerator when denominator is 2
+        int formulaCoeff;
+        int n2Coeff;
+        int metalCoeff;
+
+        if (n2Numerator % 2 == 0) {
+            formulaCoeff = 1;
+            n2Coeff = n2Numerator / 2;
+            metalCoeff = cationCount;
+        } else {
+            formulaCoeff = 2;
+            n2Coeff = n2Numerator;  // 2 × (3b/2) = 3b
+            metalCoeff = 2 * cationCount;
+        }
+
+        return buildReaction(
+                List.of(new ReactionComponent(formula, formulaCoeff)),
+                List.of(new ReactionComponent(cation, metalCoeff),
+                        new ReactionComponent("N2", n2Coeff)),
+                EnumSet.of(ReactionEffect.GAS_EVOLUTION, ReactionEffect.EXOTHERMIC)
         );
     }
 

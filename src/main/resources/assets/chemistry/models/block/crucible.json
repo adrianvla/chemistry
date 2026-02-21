@@ -1,0 +1,69 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "clay": "minecraft:block/terracotta"
+  },
+  "elements": [
+    {
+      "comment": "crucible base",
+      "from": [3, 0, 3],
+      "to": [13, 1, 13],
+      "faces": {
+        "up":    { "texture": "#clay" },
+        "down":  { "texture": "#clay", "cullface": "down" },
+        "north": { "texture": "#clay" },
+        "south": { "texture": "#clay" },
+        "east":  { "texture": "#clay" },
+        "west":  { "texture": "#clay" }
+      }
+    },
+    {
+      "comment": "crucible south wall",
+      "from": [3, 1, 3],
+      "to": [13, 8, 4],
+      "faces": {
+        "up":    { "texture": "#clay" },
+        "north": { "texture": "#clay" },
+        "south": { "texture": "#clay" },
+        "east":  { "texture": "#clay" },
+        "west":  { "texture": "#clay" }
+      }
+    },
+    {
+      "comment": "crucible north wall",
+      "from": [3, 1, 12],
+      "to": [13, 8, 13],
+      "faces": {
+        "up":    { "texture": "#clay" },
+        "north": { "texture": "#clay" },
+        "south": { "texture": "#clay" },
+        "east":  { "texture": "#clay" },
+        "west":  { "texture": "#clay" }
+      }
+    },
+    {
+      "comment": "crucible west wall",
+      "from": [3, 1, 4],
+      "to": [4, 8, 12],
+      "faces": {
+        "up":    { "texture": "#clay" },
+        "north": { "texture": "#clay" },
+        "south": { "texture": "#clay" },
+        "east":  { "texture": "#clay" },
+        "west":  { "texture": "#clay" }
+      }
+    },
+    {
+      "comment": "crucible east wall",
+      "from": [12, 1, 4],
+      "to": [13, 8, 12],
+      "faces": {
+        "up":    { "texture": "#clay" },
+        "north": { "texture": "#clay" },
+        "south": { "texture": "#clay" },
+        "east":  { "texture": "#clay" },
+        "west":  { "texture": "#clay" }
+      }
+    }
+  ]
+}

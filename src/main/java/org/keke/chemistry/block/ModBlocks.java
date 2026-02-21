@@ -38,6 +38,26 @@ public class ModBlocks {
     public static final Block VIBRATING_BLOCK = registerBlock("vibrating_block",
             new VibratingBlock(FabricBlockSettings.copy(Blocks.IRON_BLOCK).strength(2.0f).nonOpaque()));
 
+    // New container blocks
+    public static final Block TEST_TUBE = registerBlock("test_tube",
+            new TestTubeBlock(FabricBlockSettings.copy(Blocks.GLASS).strength(0.3f).nonOpaque()));
+    public static final Block AMPULE = registerBlock("ampule",
+            new AmpuleBlock(FabricBlockSettings.copy(Blocks.GLASS).strength(0.2f).nonOpaque()));
+    public static final Block BOTTLE = registerBlock("bottle",
+            new BottleBlock(FabricBlockSettings.copy(Blocks.GLASS).strength(0.4f).nonOpaque()));
+
+    // New lab equipment blocks
+    public static final Block CRUCIBLE = registerBlock("crucible",
+            new CrucibleBlock(FabricBlockSettings.copy(Blocks.TERRACOTTA).strength(1.5f).nonOpaque()));
+    public static final Block GAS_COLLECTOR = registerBlock("gas_collector",
+            new GasCollectorBlock(FabricBlockSettings.copy(Blocks.GLASS).strength(0.5f).nonOpaque()));
+    public static final Block CONDENSER = registerBlock("condenser",
+            new CondenserBlock(FabricBlockSettings.copy(Blocks.GLASS).strength(0.5f).nonOpaque()));
+    public static final Block MORTAR_PESTLE = registerBlock("mortar_pestle",
+            new MortarPestleBlock(FabricBlockSettings.copy(Blocks.STONE).strength(1.0f).nonOpaque()));
+    public static final Block FUME_HOOD = registerBlock("fume_hood",
+            new FumeHoodBlock(FabricBlockSettings.copy(Blocks.IRON_BLOCK).strength(2.0f).nonOpaque()));
+
     private static Block registerBlock(String name, Block block) {
         return Registry.register(Registries.BLOCK, new Identifier(Chemistry.MOD_ID, name), block);
     }

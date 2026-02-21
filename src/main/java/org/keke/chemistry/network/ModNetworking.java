@@ -6,9 +6,8 @@ import net.minecraft.util.math.BlockPos;
 import org.keke.chemistry.Chemistry;
 import org.keke.chemistry.block.CompositionBlock;
 import org.keke.chemistry.block.PipetteBlock;
-import org.keke.chemistry.entity.BeakerLiquidBlockEntity;
+import org.keke.chemistry.entity.AbstractChemistryContainer;
 import org.keke.chemistry.item.BeakerItem;
-import org.keke.chemistry.item.ModItems;
 import org.keke.chemistry.utils.Compound;
 import org.keke.chemistry.utils.FormulaParser;
 
@@ -44,10 +43,10 @@ public class ModNetworking {
                     return;
                 }
 
-                // Find beaker above
-                BeakerLiquidBlockEntity beaker = CompositionBlock.findBeakerAbove(player.getWorld(), blockPos);
-                if (beaker == null) {
-                    player.sendMessage(net.minecraft.text.Text.literal("No beaker found above the composer."), true);
+                // Find container above
+                AbstractChemistryContainer container = CompositionBlock.findContainerAbove(player.getWorld(), blockPos);
+                if (container == null) {
+                    player.sendMessage(net.minecraft.text.Text.literal("No container found above the composer."), true);
                     return;
                 }
 
@@ -61,13 +60,13 @@ public class ModNetworking {
 
                 if (moles <= 0) return;
 
-                // Add to beaker
-                boolean added = beaker.addChemical(formula, moles);
-                if (added) {
+                // Add to container
+                double added = container.addChemical(formula, moles);
+                if (added > 0) {
                     player.sendMessage(net.minecraft.text.Text.literal(
-                            String.format("Added %.3f mol of %s", moles, formula)), true);
+                            String.format("Added %.3f mol of %s", added, formula)), true);
                 } else {
-                    player.sendMessage(net.minecraft.text.Text.literal("Beaker is full."), true);
+                    player.sendMessage(net.minecraft.text.Text.literal("Container is full."), true);
                 }
             });
         });
@@ -86,17 +85,17 @@ public class ModNetworking {
                 // Validate the block is a pipette block
                 if (!(player.getWorld().getBlockState(blockPos).getBlock() instanceof PipetteBlock)) return;
 
-                // Find beaker above
-                BeakerLiquidBlockEntity beaker = PipetteBlock.findBeakerAbove(player.getWorld(), blockPos);
-                if (beaker == null) {
-                    player.sendMessage(net.minecraft.text.Text.literal("No beaker found above the pipette."), true);
+                // Find container above
+                AbstractChemistryContainer container = PipetteBlock.findContainerAbove(player.getWorld(), blockPos);
+                if (container == null) {
+                    player.sendMessage(net.minecraft.text.Text.literal("No container found above the pipette."), true);
                     return;
                 }
 
-                var contents = beaker.getContents();
+                var contents = container.getContents();
                 if (!contents.containsKey(formula)) {
                     player.sendMessage(net.minecraft.text.Text.literal(
-                            formula + " not found in beaker."), true);
+                            formula + " not found in container."), true);
                     return;
                 }
 
@@ -113,7 +112,7 @@ public class ModNetworking {
                 if (molesToRemove <= 0) return;
 
                 double actualRemoved = Math.min(molesToRemove, currentMoles);
-                beaker.removeChemical(formula, actualRemoved);
+                container.removeChemical(formula, actualRemoved);
 
                 player.sendMessage(net.minecraft.text.Text.literal(
                         String.format("Removed %.3f mol of %s", actualRemoved, formula)), true);
@@ -130,9 +129,9 @@ public class ModNetworking {
             server.execute(() -> {
                 if (player.getWorld() == null) return;
 
-                // Validate target is a beaker block entity
+                // Validate target is a chemistry container
                 var be = player.getWorld().getBlockEntity(blockPos);
-                if (!(be instanceof BeakerLiquidBlockEntity target)) return;
+                if (!(be instanceof AbstractChemistryContainer target)) return;
 
                 // Get source contents from held item
                 var heldStack = player.getMainHandStack();
@@ -145,16 +144,34 @@ public class ModNetworking {
                 }
 
                 if (pourAll) {
-                    // Pour all compounds from source to target
+                    // Pour all compounds from source to target — conserve matter and energy
+                    double targetMolesBefore = target.getTotalMoles();
+                    double targetTempK = target.getTemperatureK();
+                    double sourceTempK = BeakerItem.getTemperatureK(heldStack);
+
                     boolean anyPoured = false;
+                    double totalPouredMoles = 0;
                     java.util.Map<String, Double> remaining = new java.util.LinkedHashMap<>(sourceContents);
                     for (var entry : sourceContents.entrySet()) {
-                        if (target.addChemical(entry.getKey(), entry.getValue())) {
-                            remaining.remove(entry.getKey());
+                        double actualAdded = target.addChemical(entry.getKey(), entry.getValue());
+                        if (actualAdded > 0) {
+                            totalPouredMoles += actualAdded;
+                            double leftInSource = entry.getValue() - actualAdded;
+                            if (leftInSource <= 0.001) {
+                                remaining.remove(entry.getKey());
+                            } else {
+                                remaining.put(entry.getKey(), leftInSource);
+                            }
                             anyPoured = true;
                         }
                     }
                     if (anyPoured) {
+                        // Energy conservation: mix temperatures proportionally
+                        if (totalPouredMoles > 0 && (targetMolesBefore + totalPouredMoles) > 0.001) {
+                            double mixedT = (targetMolesBefore * targetTempK + totalPouredMoles * sourceTempK)
+                                    / (targetMolesBefore + totalPouredMoles);
+                            target.setTemperatureK(mixedT);
+                        }
                         BeakerItem.setContents(heldStack, remaining);
                         player.sendMessage(net.minecraft.text.Text.literal("Poured contents into beaker."), true);
                     } else {
@@ -171,9 +188,20 @@ public class ModNetworking {
                     double available = sourceContents.get(formula);
                     double toPour = (amount <= 0) ? available : Math.min(amount, available);
 
-                    if (target.addChemical(formula, toPour)) {
-                        // Remove poured amount from source item
-                        double leftover = available - toPour;
+                    double targetMolesBefore = target.getTotalMoles();
+                    double targetTempK = target.getTemperatureK();
+                    double sourceTempK = BeakerItem.getTemperatureK(heldStack);
+
+                    double actualPoured = target.addChemical(formula, toPour);
+                    if (actualPoured > 0) {
+                        // Energy conservation: mix temperatures proportionally
+                        if ((targetMolesBefore + actualPoured) > 0.001) {
+                            double mixedT = (targetMolesBefore * targetTempK + actualPoured * sourceTempK)
+                                    / (targetMolesBefore + actualPoured);
+                            target.setTemperatureK(mixedT);
+                        }
+                        // Only remove actual poured amount from source — conserve matter
+                        double leftover = available - actualPoured;
                         java.util.Map<String, Double> updated = new java.util.LinkedHashMap<>(sourceContents);
                         if (leftover <= 0.001) {
                             updated.remove(formula);
@@ -182,7 +210,7 @@ public class ModNetworking {
                         }
                         BeakerItem.setContents(heldStack, updated);
                         player.sendMessage(net.minecraft.text.Text.literal(
-                                String.format("Poured %.3f mol of %s", toPour, formula)), true);
+                                String.format("Poured %.3f mol of %s", actualPoured, formula)), true);
                     } else {
                         player.sendMessage(net.minecraft.text.Text.literal("Target beaker is full."), true);
                     }

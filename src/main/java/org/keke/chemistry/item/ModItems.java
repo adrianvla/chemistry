@@ -14,6 +14,7 @@ import net.minecraft.util.Identifier;
 import org.keke.chemistry.Chemistry;
 import org.keke.chemistry.block.ModBlocks;
 import org.keke.chemistry.utils.BeakerSize;
+import org.keke.chemistry.utils.BeakerMaterial;
 
 public class ModItems {
     public static final Item BEAKER = registerItem("beaker", new BeakerItem(new FabricItemSettings().maxCount(1)));
@@ -45,6 +46,32 @@ public class ModItems {
     public static final Item VIBRATING_BLOCK_ITEM = registerItem("vibrating_block",
             new BlockItem(ModBlocks.VIBRATING_BLOCK, new FabricItemSettings()));
 
+    // New container items
+    public static final Item TEST_TUBE = registerItem("test_tube",
+            new TestTubeItem(new FabricItemSettings().maxCount(1)));
+    public static final Item AMPULE = registerItem("ampule",
+            new AmpuleItem(new FabricItemSettings().maxCount(1)));
+    public static final Item BOTTLE_ITEM = registerItem("bottle",
+            new BottleItem(new FabricItemSettings().maxCount(1)));
+
+    // Lab tools
+    public static final Item PLIERS = registerItem("pliers",
+            new PliersItem(new FabricItemSettings().maxCount(1).maxDamage(64)));
+    public static final Item WASH_BOTTLE = registerItem("wash_bottle",
+            new WashBottleItem(new FabricItemSettings().maxCount(1)));
+
+    // New lab equipment block items
+    public static final Item CRUCIBLE_ITEM = registerItem("crucible",
+            new BlockItem(ModBlocks.CRUCIBLE, new FabricItemSettings()));
+    public static final Item GAS_COLLECTOR_ITEM = registerItem("gas_collector",
+            new BlockItem(ModBlocks.GAS_COLLECTOR, new FabricItemSettings()));
+    public static final Item CONDENSER_ITEM = registerItem("condenser",
+            new BlockItem(ModBlocks.CONDENSER, new FabricItemSettings()));
+    public static final Item MORTAR_PESTLE_ITEM = registerItem("mortar_pestle",
+            new BlockItem(ModBlocks.MORTAR_PESTLE, new FabricItemSettings()));
+    public static final Item FUME_HOOD_ITEM = registerItem("fume_hood",
+            new BlockItem(ModBlocks.FUME_HOOD, new FabricItemSettings()));
+
     private static final ItemGroup CONTAINERS = FabricItemGroup.builder()
             .icon(() -> new ItemStack(BEAKER))
             .displayName(Text.translatable("itemGroup.chemistry.containers"))
@@ -57,6 +84,13 @@ public class ModItems {
                         BeakerItem.setBeakerSize(sizedBeaker, size);
                         entries.add(sizedBeaker);
                     }
+                }
+                // Metal beakers (all sizes)
+                for (BeakerSize size : BeakerSize.values()) {
+                    ItemStack metalBeaker = new ItemStack(BEAKER);
+                    BeakerItem.setBeakerSize(metalBeaker, size);
+                    BeakerItem.setBeakerMaterial(metalBeaker, BeakerMaterial.METAL);
+                    entries.add(metalBeaker);
                 }
                 // Pre-filled example beakers
                 entries.add(createFilledBeaker("H2O", 1.0));
@@ -81,6 +115,22 @@ public class ModItems {
                 entries.add(new ItemStack(PETRI_DISH_ITEM));
                 entries.add(new ItemStack(SEDIMENTATION_BLOCK_ITEM));
                 entries.add(new ItemStack(VIBRATING_BLOCK_ITEM));
+                // New containers
+                entries.add(new ItemStack(TEST_TUBE));
+                entries.add(new ItemStack(AMPULE));
+                entries.add(new ItemStack(BOTTLE_ITEM));
+                // Lab tools
+                entries.add(new ItemStack(PLIERS));
+                entries.add(new ItemStack(WASH_BOTTLE));
+                // New lab equipment
+                entries.add(new ItemStack(CRUCIBLE_ITEM));
+                entries.add(new ItemStack(GAS_COLLECTOR_ITEM));
+                entries.add(new ItemStack(CONDENSER_ITEM));
+                entries.add(new ItemStack(MORTAR_PESTLE_ITEM));
+                entries.add(new ItemStack(FUME_HOOD_ITEM));
+                // Pre-filled explosive compound examples
+                entries.add(createFilledBeaker("C3H5N3O9", 0.5));
+                entries.add(createFilledBeaker("C7H5N3O6", 1.0));
             })
             .build();
 

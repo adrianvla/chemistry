@@ -73,14 +73,38 @@ public class ChemistryCauldronBlock extends BlockWithEntity {
                 // Right-click with filled beaker: pour into cauldron
                 if (heldItem.getItem() instanceof BeakerItem && BeakerItem.hasContents(heldItem)) {
                     Map<String, Double> beakerContents = BeakerItem.getContents(heldItem);
+                    double cauldronMolesBefore = cauldron.getTotalMoles();
+                    double cauldronTempK = cauldron.getTemperatureK();
+                    double sourceTempK = BeakerItem.getTemperatureK(heldItem);
+
                     boolean poured = false;
+                    double totalPouredMoles = 0;
+                    Map<String, Double> remaining = new java.util.LinkedHashMap<>(beakerContents);
                     for (var entry : beakerContents.entrySet()) {
-                        if (cauldron.addChemical(entry.getKey(), entry.getValue())) {
+                        double actualAdded = cauldron.addChemical(entry.getKey(), entry.getValue());
+                        if (actualAdded > 0) {
+                            totalPouredMoles += actualAdded;
+                            double leftInSource = entry.getValue() - actualAdded;
+                            if (leftInSource <= 0.001) {
+                                remaining.remove(entry.getKey());
+                            } else {
+                                remaining.put(entry.getKey(), leftInSource);
+                            }
                             poured = true;
                         }
                     }
                     if (poured) {
-                        BeakerItem.clearContents(heldItem);
+                        // Energy conservation: mix temperatures
+                        if (totalPouredMoles > 0 && (cauldronMolesBefore + totalPouredMoles) > 0.001) {
+                            double mixedT = (cauldronMolesBefore * cauldronTempK + totalPouredMoles * sourceTempK)
+                                    / (cauldronMolesBefore + totalPouredMoles);
+                            cauldron.setTemperatureK(mixedT);
+                        }
+                        if (remaining.isEmpty()) {
+                            BeakerItem.clearContents(heldItem);
+                        } else {
+                            BeakerItem.setContents(heldItem, remaining);
+                        }
                         world.playSound(null, pos, SoundEvents.ITEM_BUCKET_EMPTY,
                                 SoundCategory.BLOCKS, 1.0f, 0.9f);
                     }

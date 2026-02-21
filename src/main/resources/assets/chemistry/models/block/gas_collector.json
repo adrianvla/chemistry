@@ -1,0 +1,46 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "glass": "minecraft:block/glass",
+    "iron": "minecraft:block/iron_block"
+  },
+  "elements": [
+    {
+      "comment": "funnel",
+      "from": [2, 0, 2],
+      "to": [14, 4, 14],
+      "faces": {
+        "up":    { "texture": "#glass" },
+        "down":  { "texture": "#glass", "cullface": "down" },
+        "north": { "texture": "#glass" },
+        "south": { "texture": "#glass" },
+        "east":  { "texture": "#glass" },
+        "west":  { "texture": "#glass" }
+      }
+    },
+    {
+      "comment": "chamber",
+      "from": [4, 4, 4],
+      "to": [12, 12, 12],
+      "faces": {
+        "up":    { "texture": "#glass" },
+        "north": { "texture": "#glass" },
+        "south": { "texture": "#glass" },
+        "east":  { "texture": "#glass" },
+        "west":  { "texture": "#glass" }
+      }
+    },
+    {
+      "comment": "cap",
+      "from": [5, 12, 5],
+      "to": [11, 14, 11],
+      "faces": {
+        "up":    { "texture": "#iron" },
+        "north": { "texture": "#iron" },
+        "south": { "texture": "#iron" },
+        "east":  { "texture": "#iron" },
+        "west":  { "texture": "#iron" }
+      }
+    }
+  ]
+}

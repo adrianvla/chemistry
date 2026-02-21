@@ -5,5 +5,7 @@ public enum ReactionEffect {
     COLOR_CHANGE,
     PRECIPITATE,
     EXOTHERMIC,
-    ENDOTHERMIC
+    ENDOTHERMIC,
+    EXPLOSIVE,
+    INCENDIARY
 }

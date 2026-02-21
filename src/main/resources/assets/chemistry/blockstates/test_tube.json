@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "chemistry:block/test_tube" },
+    "facing=east": { "model": "chemistry:block/test_tube", "y": 90 },
+    "facing=south": { "model": "chemistry:block/test_tube", "y": 180 },
+    "facing=west": { "model": "chemistry:block/test_tube", "y": 270 }
+  }
+}

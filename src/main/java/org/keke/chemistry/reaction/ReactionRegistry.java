@@ -309,6 +309,69 @@ public class ReactionRegistry {
                 ReactionType.SINGLE_REPLACEMENT, Reaction.ReactionConditions.ambient(),
                 EnumSet.of(ReactionEffect.GAS_EVOLUTION, ReactionEffect.EXOTHERMIC)
         );
+
+        // === Thermite ===
+        // Fe2O3 + 2Al → Al2O3 + 2Fe  (ΔH = −851.5 kJ/mol, extremely exothermic)
+        addReaction(
+                List.of(new ReactionComponent("Fe2O3", 1), new ReactionComponent("Al", 2)),
+                List.of(new ReactionComponent("Al2O3", 1), new ReactionComponent("Fe", 2)),
+                ReactionType.REDOX, Reaction.ReactionConditions.heated(),
+                EnumSet.of(ReactionEffect.EXOTHERMIC, ReactionEffect.INCENDIARY)
+        );
+        // Fe3O4 + 8Al → 4Al2O3 + 9Fe (alternative thermite)
+        addReaction(
+                List.of(new ReactionComponent("Fe3O4", 3), new ReactionComponent("Al", 8)),
+                List.of(new ReactionComponent("Al2O3", 4), new ReactionComponent("Fe", 9)),
+                ReactionType.REDOX, Reaction.ReactionConditions.heated(),
+                EnumSet.of(ReactionEffect.EXOTHERMIC, ReactionEffect.INCENDIARY)
+        );
+
+        // === Nitroglycerin synthesis ===
+        // C3H8O3 + 3HNO3 → C3H5N3O9 + 3H2O  (catalyst: H2SO4)
+        addReaction(
+                List.of(new ReactionComponent("C3H8O3", 1), new ReactionComponent("HNO3", 3)),
+                List.of(new ReactionComponent("C3H5N3O9", 1), new ReactionComponent("H2O", 3)),
+                ReactionType.SYNTHESIS, new Reaction.ReactionConditions(0, 283, "H2SO4", false),
+                EnumSet.of(ReactionEffect.EXOTHERMIC)
+        );
+
+        // === TNT (2,4,6-trinitrotoluene) synthesis ===
+        // C7H8 + 3HNO3 → C7H5N3O6 + 3H2O  (catalyst: H2SO4)
+        addReaction(
+                List.of(new ReactionComponent("C7H8", 1), new ReactionComponent("HNO3", 3)),
+                List.of(new ReactionComponent("C7H5N3O6", 1), new ReactionComponent("H2O", 3)),
+                ReactionType.SYNTHESIS, new Reaction.ReactionConditions(0, 373, "H2SO4", false),
+                EnumSet.of(ReactionEffect.EXOTHERMIC)
+        );
+
+        // === Nitroglycerin detonation ===
+        // 4C3H5N3O9 → 12CO2 + 10H2O + 6N2 + O2
+        addReaction(
+                List.of(new ReactionComponent("C3H5N3O9", 4)),
+                List.of(new ReactionComponent("CO2", 12), new ReactionComponent("H2O", 10),
+                        new ReactionComponent("N2", 6), new ReactionComponent("O2", 1)),
+                ReactionType.DECOMPOSITION, new Reaction.ReactionConditions(0, 1000, "", false),
+                EnumSet.of(ReactionEffect.EXPLOSIVE, ReactionEffect.EXOTHERMIC, ReactionEffect.GAS_EVOLUTION)
+        );
+
+        // === TNT detonation ===
+        // 2C7H5N3O6 → 12CO + 5H2 + 3N2 + 2C (incomplete combustion)
+        addReaction(
+                List.of(new ReactionComponent("C7H5N3O6", 2)),
+                List.of(new ReactionComponent("CO", 12), new ReactionComponent("H2", 5),
+                        new ReactionComponent("N2", 3), new ReactionComponent("C", 2)),
+                ReactionType.DECOMPOSITION, new Reaction.ReactionConditions(0, 1000, "", false),
+                EnumSet.of(ReactionEffect.EXPLOSIVE, ReactionEffect.EXOTHERMIC, ReactionEffect.GAS_EVOLUTION)
+        );
+
+        // === Black powder (gunpowder) ===
+        // 2KNO3 + S + 3C → K2S + N2 + 3CO2
+        addReaction(
+                List.of(new ReactionComponent("KNO3", 2), new ReactionComponent("S", 1), new ReactionComponent("C", 3)),
+                List.of(new ReactionComponent("K2S", 1), new ReactionComponent("N2", 1), new ReactionComponent("CO2", 3)),
+                ReactionType.COMBUSTION, Reaction.ReactionConditions.heated(),
+                EnumSet.of(ReactionEffect.EXPLOSIVE, ReactionEffect.EXOTHERMIC, ReactionEffect.GAS_EVOLUTION)
+        );
     }
 
     private static void addReaction(List<ReactionComponent> reactants, List<ReactionComponent> products,

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "chemistry:block/condenser" },
+    "facing=east": { "model": "chemistry:block/condenser", "y": 90 },
+    "facing=south": { "model": "chemistry:block/condenser", "y": 180 },
+    "facing=west": { "model": "chemistry:block/condenser", "y": 270 }
+  }
+}

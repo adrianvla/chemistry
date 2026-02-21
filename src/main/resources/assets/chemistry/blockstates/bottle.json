@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "chemistry:block/bottle" },
+    "facing=east": { "model": "chemistry:block/bottle", "y": 90 },
+    "facing=south": { "model": "chemistry:block/bottle", "y": 180 },
+    "facing=west": { "model": "chemistry:block/bottle", "y": 270 }
+  }
+}

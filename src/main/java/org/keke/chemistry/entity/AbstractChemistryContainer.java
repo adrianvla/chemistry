@@ -173,15 +173,15 @@ public abstract class AbstractChemistryContainer extends BlockEntity {
      * Add a chemical to the container. Triggers reaction check.
      * Uses volume-based capacity checking.
      *
-     * @return true if the chemical was added (some or all fit)
+     * @return the actual moles added (may be less than requested if near capacity), or 0 if nothing fit
      */
-    public boolean addChemical(String formula, double moles) {
-        if (moles <= 0) return false;
+    public double addChemical(String formula, double moles) {
+        if (moles <= 0) return 0;
 
         // Check remaining volume capacity
         double currentVolume = getTotalVolumeMl();
         double remainingMl = maxCapacityMl - currentVolume;
-        if (remainingMl <= 0.01) return false;
+        if (remainingMl <= 0.01) return 0;
 
         // Calculate how many moles of this compound fit in the remaining volume
         double molarMass = Compound.computeMolarMass(formula);
@@ -192,7 +192,7 @@ public abstract class AbstractChemistryContainer extends BlockEntity {
         double maxMolesToFit = remainingMl / mlPerMol;
 
         double toAdd = Math.min(moles, maxMolesToFit);
-        if (toAdd <= 0.001) return false;
+        if (toAdd <= 0.001) return 0;
 
         contents.merge(formula, toAdd, Double::sum);
         recomputeColor();
@@ -202,7 +202,7 @@ public abstract class AbstractChemistryContainer extends BlockEntity {
         // Trigger reaction check
         processReactions();
 
-        return true;
+        return toAdd;
     }
 
     /**
@@ -552,6 +552,46 @@ public abstract class AbstractChemistryContainer extends BlockEntity {
             markDirty();
             syncToClient();
         }
+    }
+
+    // ── Heating from below ─────────────────────────────────────────────
+
+    /** Bunsen burner heating rate in K/tick (reaches ~600°C in ~15 seconds ≈ 300 ticks). */
+    protected static final double BUNSEN_HEATING_RATE = 2.0;
+
+    /** Target temperature when heated by a lit bunsen burner (≈800°C). */
+    protected static final double BUNSEN_TARGET_TEMP_K = 1073.15;
+
+    /**
+     * Check if a lit bunsen burner is below and apply heating.
+     * Call from each subclass's tick method.
+     *
+     * @return true if heating was applied
+     */
+    protected boolean tickHeatingFromBelow() {
+        if (world == null || world.isClient) return false;
+        if (contents.isEmpty()) return false;
+
+        net.minecraft.block.BlockState below = world.getBlockState(pos.down());
+        if (below.getBlock() instanceof org.keke.chemistry.block.BunsenBurnerBlock
+                && below.get(org.keke.chemistry.block.BunsenBurnerBlock.LIT)) {
+            if (temperatureK < BUNSEN_TARGET_TEMP_K) {
+                temperatureK = Math.min(BUNSEN_TARGET_TEMP_K,
+                        temperatureK + BUNSEN_HEATING_RATE);
+                markDirty();
+                syncToClient();
+
+                // Check for thermal overload
+                if (temperatureK > getMaxSafeTemperature()) {
+                    onThermalOverload(temperatureK, BUNSEN_HEATING_RATE);
+                }
+
+                // Re-process reactions (heat may trigger decomposition)
+                processReactions();
+            }
+            return true;
+        }
+        return false;
     }
 
     /**

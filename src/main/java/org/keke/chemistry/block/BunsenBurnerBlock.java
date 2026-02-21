@@ -58,6 +58,7 @@ public class BunsenBurnerBlock extends Block {
                 station.setTemperature(!isLit ? 100 : 20);
                 station.tryStartReaction();
             }
+            // Chemistry containers above will detect the lit state during their tick
         }
         return ActionResult.success(world.isClient);
     }

@@ -16,6 +16,7 @@ import org.keke.chemistry.reaction.ReactionEffect;
 import org.keke.chemistry.reaction.ReactionResult;
 import org.keke.chemistry.utils.DrinkingEffects;
 import org.keke.chemistry.utils.GasCloudHelper;
+import org.keke.chemistry.utils.BeakerMaterial;
 
 import java.util.List;
 import java.util.Map;
@@ -57,8 +58,20 @@ public class BeakerLiquidBlockEntity extends AbstractChemistryContainer {
     /** Tick counter for temperature damage interval. */
     private int damageTick = 0;
 
+    /** Material of this beaker (GLASS or METAL). */
+    private BeakerMaterial beakerMaterial = BeakerMaterial.GLASS;
+
     public BeakerLiquidBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.BEAKER_LIQUID, pos, state);
+    }
+
+    public BeakerMaterial getBeakerMaterial() {
+        return beakerMaterial;
+    }
+
+    public void setBeakerMaterial(BeakerMaterial material) {
+        this.beakerMaterial = material;
+        markDirty();
     }
 
     // ── Hooks ──────────────────────────────────────────────────────────
@@ -66,6 +79,11 @@ public class BeakerLiquidBlockEntity extends AbstractChemistryContainer {
     @Override
     protected double getEffectiveMassG() {
         return effectiveMassG;
+    }
+
+    @Override
+    protected double getMaxSafeTemperature() {
+        return beakerMaterial.getMaxSafeTempK();
     }
 
     @Override
@@ -96,6 +114,12 @@ public class BeakerLiquidBlockEntity extends AbstractChemistryContainer {
 
     @Override
     protected boolean onThermalOverload(double currentTempK, double deltaT) {
+        if (beakerMaterial == BeakerMaterial.METAL) {
+            // Metal beakers resist thermal shock — cap temperature at max
+            this.temperatureK = beakerMaterial.getMaxSafeTempK();
+            markDirty();
+            return false; // don't destroy
+        }
         crackBeaker();
         return true;
     }
@@ -152,6 +176,9 @@ public class BeakerLiquidBlockEntity extends AbstractChemistryContainer {
     public static void tick(World world, BlockPos pos, BlockState state, BeakerLiquidBlockEntity be) {
         if (world.isClient) return;
         if (be.isEmpty()) return;
+
+        // Heating from bunsen burner below
+        be.tickHeatingFromBelow();
 
         // Newton's law of cooling each tick
         boolean onCoolingBlock = world.getBlockState(pos.down()).getBlock() instanceof CoolingBlock;
@@ -230,6 +257,20 @@ public class BeakerLiquidBlockEntity extends AbstractChemistryContainer {
     }
 
     // ── Beaker-specific ────────────────────────────────────────────────
+
+    @Override
+    public void writeNbt(net.minecraft.nbt.NbtCompound nbt) {
+        super.writeNbt(nbt);
+        nbt.putString("beakerMaterial", beakerMaterial.name());
+    }
+
+    @Override
+    public void readNbt(net.minecraft.nbt.NbtCompound nbt) {
+        super.readNbt(nbt);
+        if (nbt.contains("beakerMaterial")) {
+            beakerMaterial = BeakerMaterial.fromName(nbt.getString("beakerMaterial"));
+        }
+    }
 
     /**
      * Beaker cracks from thermal stress — destroys the block and contents.

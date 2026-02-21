@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "chemistry:block/ampule" },
+    "facing=east": { "model": "chemistry:block/ampule", "y": 90 },
+    "facing=south": { "model": "chemistry:block/ampule", "y": 180 },
+    "facing=west": { "model": "chemistry:block/ampule", "y": 270 }
+  }
+}

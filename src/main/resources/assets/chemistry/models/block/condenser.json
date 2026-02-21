@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "glass": "minecraft:block/glass",
+    "iron": "minecraft:block/iron_block"
+  },
+  "elements": [
+    {
+      "comment": "condenser column",
+      "from": [5, 0, 5],
+      "to": [11, 14, 11],
+      "faces": {
+        "up":    { "texture": "#glass" },
+        "down":  { "texture": "#glass", "cullface": "down" },
+        "north": { "texture": "#glass" },
+        "south": { "texture": "#glass" },
+        "east":  { "texture": "#glass" },
+        "west":  { "texture": "#glass" }
+      }
+    },
+    {
+      "comment": "cooling jacket",
+      "from": [3, 3, 3],
+      "to": [13, 11, 13],
+      "faces": {
+        "up":    { "texture": "#iron" },
+        "down":  { "texture": "#iron" },
+        "north": { "texture": "#iron" },
+        "south": { "texture": "#iron" },
+        "east":  { "texture": "#iron" },
+        "west":  { "texture": "#iron" }
+      }
+    }
+  ]
+}

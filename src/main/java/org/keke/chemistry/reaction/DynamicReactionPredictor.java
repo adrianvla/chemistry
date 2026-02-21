@@ -71,6 +71,10 @@ public class DynamicReactionPredictor {
             Reaction combustion = tryCombustion(f1, f2);
             if (combustion != null) return combustion;
 
+            // Try silicide + acid: Mg2Si + 4HCl → 2MgCl2 + SiH4
+            Reaction silicideAcid = trySilicideAcid(f1, f2);
+            if (silicideAcid != null) return silicideAcid;
+
             // Try direct synthesis: element + element → compound
             Reaction synthesis = trySynthesis(f1, f2);
             if (synthesis != null) return synthesis;
@@ -667,6 +671,76 @@ public class DynamicReactionPredictor {
         return new Reaction(reactants, products, ReactionType.COMBUSTION,
                 Reaction.ReactionConditions.heated(),
                 EnumSet.of(ReactionEffect.EXOTHERMIC));
+    }
+
+    // ── Silicide + Acid → Metal salt + Silane ────────────────────────
+
+    /** Known silicide compounds and their metal info: formula → {metal, metalCount, siCount} */
+    private static final Map<String, int[]> SILICIDE_METALS = Map.of(
+            "Mg2Si", new int[]{2, 1},   // 2 Mg atoms, 1 Si atom
+            "Ca2Si", new int[]{2, 1},
+            "Na4Si", new int[]{4, 1}
+    );
+
+    private static final Map<String, String> SILICIDE_METAL_SYM = Map.of(
+            "Mg2Si", "Mg",
+            "Ca2Si", "Ca",
+            "Na4Si", "Na"
+    );
+
+    /**
+     * Silicide + acid → metal salt + silane (SiH4).
+     * e.g. Mg2Si + 4HCl → 2MgCl2 + SiH4
+     *
+     * General pattern: M_a Si + (a×charge) HX → a MX_charge + SiH4
+     * where charge is the metal cation charge.
+     */
+    private static Reaction trySilicideAcid(String f1, String f2) {
+        String silicide, acid;
+        if (SILICIDE_METALS.containsKey(f1) && IonicCompound.isAcid(f2)) {
+            silicide = f1; acid = f2;
+        } else if (SILICIDE_METALS.containsKey(f2) && IonicCompound.isAcid(f1)) {
+            silicide = f2; acid = f1;
+        } else {
+            return null;
+        }
+
+        IonicCompound acidIonic = IonicCompound.decompose(acid);
+        if (acidIonic == null) return null;
+
+        String metalSym = SILICIDE_METAL_SYM.get(silicide);
+        int[] info = SILICIDE_METALS.get(silicide);
+        int metalCount = info[0];
+        int siCount = info[1];
+
+        int metalCharge = SolubilityTable.getCationCharge(metalSym);
+        if (metalCharge <= 0) metalCharge = 2;
+
+        String anion = acidIonic.getAnion();
+        int anionCharge = acidIonic.getAnionCharge();
+
+        // Build metal salt
+        String salt = SolubilityTable.buildFormula(metalSym, metalCharge, anion, anionCharge);
+
+        // Stoichiometry: need metalCount × metalCharge acid molecules
+        // Each acid provides anions for salt and H for silane
+        // e.g. Mg2Si + 4HCl → 2MgCl2 + SiH4 (4 Cl for 2 MgCl2, 4 H for SiH4)
+        int acidCoeff = metalCount * metalCharge;
+
+        // Salt coefficient: metalCount salts produced (1 per metal atom if charge balanced)
+        int saltCoeff = metalCount;
+
+        List<ReactionComponent> reactants = new ArrayList<>();
+        reactants.add(new ReactionComponent(silicide, 1));
+        reactants.add(new ReactionComponent(acid, acidCoeff));
+
+        List<ReactionComponent> products = new ArrayList<>();
+        products.add(new ReactionComponent(salt, saltCoeff));
+        products.add(new ReactionComponent("SiH4", siCount));
+
+        return new Reaction(reactants, products, ReactionType.SINGLE_REPLACEMENT,
+                Reaction.ReactionConditions.ambient(),
+                EnumSet.of(ReactionEffect.GAS_EVOLUTION, ReactionEffect.EXOTHERMIC));
     }
 
     // ── Direct Synthesis: element + element → compound ───────────────

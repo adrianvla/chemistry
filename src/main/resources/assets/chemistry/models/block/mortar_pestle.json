@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "stone": "minecraft:block/stone"
+  },
+  "elements": [
+    {
+      "comment": "mortar bowl",
+      "from": [3, 0, 3],
+      "to": [13, 6, 13],
+      "faces": {
+        "up":    { "texture": "#stone" },
+        "down":  { "texture": "#stone", "cullface": "down" },
+        "north": { "texture": "#stone" },
+        "south": { "texture": "#stone" },
+        "east":  { "texture": "#stone" },
+        "west":  { "texture": "#stone" }
+      }
+    },
+    {
+      "comment": "pestle handle",
+      "from": [7, 6, 7],
+      "to": [9, 12, 9],
+      "faces": {
+        "up":    { "texture": "#stone" },
+        "north": { "texture": "#stone" },
+        "south": { "texture": "#stone" },
+        "east":  { "texture": "#stone" },
+        "west":  { "texture": "#stone" }
+      }
+    }
+  ]
+}

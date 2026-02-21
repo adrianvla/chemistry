@@ -6,11 +6,15 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.entity.FlyingItemEntityRenderer;
 import org.keke.chemistry.block.ModBlocks;
+import org.keke.chemistry.entity.ModEntityTypes;
 import org.keke.chemistry.environement.BeakerLiquidBlockEntityRenderer;
 import org.keke.chemistry.environement.ReactionStationBlockEntityRenderer;
+import org.keke.chemistry.item.AbstractContainerItem;
 import org.keke.chemistry.item.BeakerItem;
 import org.keke.chemistry.item.ModItems;
 import org.keke.chemistry.screen.ModScreenHandlers;
@@ -36,10 +40,21 @@ public class ChemistryClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.COMPOSITION_BLOCK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.PIPETTE_BLOCK, RenderLayer.getCutout());
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.PETRI_DISH, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TEST_TUBE, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.AMPULE, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOTTLE, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.CRUCIBLE, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.GAS_COLLECTOR, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.CONDENSER, RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.MORTAR_PESTLE, RenderLayer.getCutout());
+        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.FUME_HOOD, RenderLayer.getCutout());
 
         // Block entity renderers
         BlockEntityRendererRegistry.register(BEAKER_LIQUID, BeakerLiquidBlockEntityRenderer::new);
         BlockEntityRendererRegistry.register(REACTION_STATION, ReactionStationBlockEntityRenderer::new);
+
+        // Entity renderers
+        EntityRendererRegistry.register(ModEntityTypes.THROWN_CONTAINER, FlyingItemEntityRenderer::new);
 
         // Screen registrations
         HandledScreens.register(ModScreenHandlers.COMPOSITION, CompositionScreen::new);
@@ -59,5 +74,15 @@ public class ChemistryClient implements ClientModInitializer {
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
             return stack.getOrCreateNbt().getInt("cachedColor");
         }, ModItems.BEAKER_LIQUID_ITEM);
+
+        // Color providers for new container items (shared NBT format)
+        ColorProviderRegistry.ITEM.register((stack, layer) -> {
+            if (layer == 0) {
+                Map<String, Double> contents = AbstractContainerItem.getContents(stack);
+                if (contents.isEmpty()) return 0xFFFFFF;
+                return CalculateColor.calculateBlendedColor(contents);
+            }
+            return 0xFFFFFF;
+        }, ModItems.TEST_TUBE, ModItems.AMPULE, ModItems.BOTTLE_ITEM);
     }
 }

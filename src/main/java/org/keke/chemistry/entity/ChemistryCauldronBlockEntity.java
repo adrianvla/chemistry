@@ -111,6 +111,9 @@ public class ChemistryCauldronBlockEntity extends AbstractChemistryContainer {
             return;
         }
 
+        // Heating from bunsen burner below
+        cauldron.tickHeatingFromBelow();
+
         // Newton cooling
         if (Math.abs(cauldron.temperatureK - AMBIENT_TEMP_K) > 0.01) {
             cauldron.temperatureK -= COOLING_K * (cauldron.temperatureK - AMBIENT_TEMP_K);

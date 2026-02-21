@@ -210,6 +210,13 @@ public class ThermodynamicData {
         FORMATION_ENTHALPIES.put("Fe(SCN)3", -250.0);
         FORMATION_ENTHALPIES.put("KSCN", -200.2);
         FORMATION_ENTHALPIES.put("NaSCN", -176.1);
+
+        // Explosives & precursors
+        FORMATION_ENTHALPIES.put("C3H8O3", -669.6);    // glycerol
+        FORMATION_ENTHALPIES.put("C7H8", 12.0);        // toluene
+        FORMATION_ENTHALPIES.put("C3H5N3O9", -364.0);  // nitroglycerin
+        FORMATION_ENTHALPIES.put("C7H5N3O6", -67.0);   // TNT
+        FORMATION_ENTHALPIES.put("K2S", -380.7);        // potassium sulfide
     }
 
     /**

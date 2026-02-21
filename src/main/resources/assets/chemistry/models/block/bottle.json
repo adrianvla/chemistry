@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "glass": "minecraft:block/glass"
+  },
+  "elements": [
+    {
+      "comment": "bottle body",
+      "from": [4, 0, 4],
+      "to": [12, 8, 12],
+      "faces": {
+        "up":    { "texture": "#glass" },
+        "down":  { "texture": "#glass", "cullface": "down" },
+        "north": { "texture": "#glass" },
+        "south": { "texture": "#glass" },
+        "east":  { "texture": "#glass" },
+        "west":  { "texture": "#glass" }
+      }
+    },
+    {
+      "comment": "bottle neck",
+      "from": [6, 8, 6],
+      "to": [10, 12, 10],
+      "faces": {
+        "up":    { "texture": "#glass" },
+        "north": { "texture": "#glass" },
+        "south": { "texture": "#glass" },
+        "east":  { "texture": "#glass" },
+        "west":  { "texture": "#glass" }
+      }
+    }
+  ]
+}
